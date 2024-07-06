@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./weather1.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="d-flex mt-2 mt-5">
+                    <input id="input_name" type="text" class="form-control" placeholder="Enter the city name">
+                    <!-- <input onclick="search()" type="button" value="search" class="btn btn-success ms-3"> -->
+                    <button onclick="search()" type="button" class="btn btn-success ms-3"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </div>
+            <div class="row mt-5"> 
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                  <div class="box-wrap mt-5">
+       
+       
+                    <div class="box-inner">
+                    <div class="box">
+                        <div class="box-base"></div>
+                        <div class="flip front">
+                            <div class="city">
+                                <div class="clouds">
+                                    <div class="cloud cloud-1"><div class="dtl"></div></div>
+                                    <div class="cloud cloud-2"><div class="dtl"></div></div>
+                                    <div class="cloud cloud-3"><div class="dtl"></div></div>
+                                </div>
+            
+                                   <div class="ms-5"  style="color: rgb(231, 215, 215);">
+                                       <div >
+                                        <h6 style="font-weight:bold" class="flex-grow-1"></h6>
+                                        <h6> <span class="me-5" style="float: right;"><h6></h6></span></h6>
+                                      </div>
+                          
+                                      <div class="d-flex  text-center mt-4 mb-4">
+                                        <div>
+                                        </div>
+                                       <div class="ms-5 mb-1">
+                                            <h6 class="display-4 mb-0 font-weight-bold " style="color: #8ea8df;"> 0°C </h6>
+                                            <span style="font-size: 25px; color: #8ea8df;" ></span>
+                                       </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col">Air quality
+                                            <p style="font-weight:bold">0</p>
+                                        </div>
+                                        <div class="col">Wind
+                                            <p style="font-weight:bold">0km/h</p>
+                                        </div>
+                                        <div class="col">Humidity
+                                            <p style="font-weight:bold">0%</p>
+                                        </div>
+                                        <div class="col">Feels like
+                                            <p style="font-weight:bold">0c&#176;</p>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="row">
+                                        <div class="col">Pressure
+                                            <p style="font-weight:bold">0 mb</p>
+                                        </div>
+                                        <div class="col">Visibility
+                                            <p style="font-weight:bold">0 km</p>
+                                        </div>
+                                        <div class="col">min temp
+                                            <p style="font-weight:bold">0c&#176;</p>
+                                        </div>
+                                        <div class="col">max temp
+                                            <p style="font-weight:bold">0c&#176;</p>
+                                        </div>
+                                      </div>
+                                   </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                    <div id="result">
+                        
+                    </div>
+                </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    function search(){
+        let cityName = input_name.value
+        console.log(cityName);
+        if(cityName){
+            const http =new XMLHttpRequest()
+            http.open('get',`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=24ca3d49a1702f2f5648f33378521b88`)
+            http.send()
+            console.log(http.readyState);
+
+            http.onreadystatechange= ()=>{
+            console.log(http.readyState);
+            if(http.readyState==4){
+              if(http.status>=200 && http.status<300){
+                console.log(http.responseText);
+
+                let item = JSON.parse(http.responseText)
+                console.log(item);
+                let city=item.name
+                console.log(city);
+                let weather=item.weather[0].description
+                console.log(weather);
+                let temperature=parseInt(item.main.temp - 273.15)
+                console.log(temperature);
+                let pressure=item.main.pressure
+                console.log(pressure);
+                let humidity=item.main.humidity
+                console.log(humidity);
+                let feelslike = parseInt(item.main.feels_like - 273.15)
+                console.log(feelslike);
+                let speed = item.wind.speed
+                console.log(speed);
+                let visibility = item.visibility/1000
+                console.log(visibility);
+                let min = parseInt(item.main.temp_min - 273.15)
+                console.log(min);
+                let max = parseInt(item.main.temp_max - 273.15)
+                console.log(max);
+                let icon=item.weather[0].icon
+
+                const timestamp = item.dt * 1000;
+                const date = new Date(timestamp);
+                const formattedDate = date.toLocaleDateString();
+                const formattedTime = date.toLocaleTimeString();  
+        
+                result.innerHTML+=`  <div class="box-wrap mt-5">
+       
+       
+        <div class="box-inner">
+        <div class="box">
+            <div class="box-base"></div>
+            <div class="flip front">
+                <div class="city">
+                    <div class="clouds">
+                        <div class="cloud cloud-1"><div class="dtl"></div></div>
+                        <div class="cloud cloud-2"><div class="dtl"></div></div>
+                        <div class="cloud cloud-3"><div class="dtl"></div></div>
+                    </div>
+
+                       <div class="ms-5"  style="color: rgb(231, 215, 215);">
+                           <div >
+                            <h6 style="font-weight:bold" class="flex-grow-1">${city}</h6>
+                            <h6>${formattedDate} <span class="me-5" style="float: right;"><h6>${formattedTime}</h6></span></h6>
+                          </div>
+              
+                          <div class="d-flex  text-center mt-4 mb-4">
+                            <div>
+                              <img width="110px"  src="http://openweathermap.org/img/wn/${icon}@4x.png">
+                            </div>
+                           <div class="ms-5 mb-1">
+                                <h6 class="display-4 mb-0 font-weight-bold " style="color: #8ea8df;"> ${temperature}°C </h6>
+                                <span style="font-size: 25px; color: #8ea8df;" >${weather}</span>
+                           </div>
+                          </div>
+                          <div class="row">
+                            <div class="col">Air quality
+                                <p style="font-weight:bold">65</p>
+                            </div>
+                            <div class="col">Wind
+                                <p style="font-weight:bold">${speed}km/h</p>
+                            </div>
+                            <div class="col">Humidity
+                                <p style="font-weight:bold">${humidity}%</p>
+                            </div>
+                            <div class="col">Feels like
+                                <p style="font-weight:bold">${feelslike}c&#176;</p>
+                            </div>
+                          </div>
+        
+                          <div class="row">
+                            <div class="col">Pressure
+                                <p style="font-weight:bold">${pressure} mb</p>
+                            </div>
+                            <div class="col">Visibility
+                                <p style="font-weight:bold">${visibility} km</p>
+                            </div>
+                            <div class="col">min temp
+                                <p style="font-weight:bold">${min}c&#176;</p>
+                            </div>
+                            <div class="col">max temp
+                                <p style="font-weight:bold">${max}c&#176;</p>
+                            </div>
+                          </div>
+                       </div>
+                </div>
+                
+            </div>
+        </div>
+        </div>
+    </div>`
+            
+        }
+    }
+} 
+        }
+        else{
+            alert('enter valid input')
+        }
+}
+</script>
+</html>
